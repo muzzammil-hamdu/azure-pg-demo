@@ -62,5 +62,4 @@ variable "pg_password" {
 
 output "postgres_connection_string" {
   value     = "postgresql://citus:${var.pg_password}@${azurerm_postgresql_flexible_server.pg_server.fqdn}:5432/${azurerm_postgresql_flexible_server_database.pg_database.name}"
-  sensitive = true
 }
