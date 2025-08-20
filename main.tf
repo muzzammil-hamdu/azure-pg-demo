@@ -31,7 +31,7 @@ resource "azurerm_postgresql_flexible_server" "pg_server" {
   location               = azurerm_resource_group.rg.location
   administrator_login    = "citus"
   administrator_password = var.pg_password
-  version                = "11"
+  version                = "16"
   sku_name               = "B_Standard_B1ms"
   storage_mb             = 32768
   backup_retention_days  = 7
