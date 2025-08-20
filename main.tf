@@ -22,7 +22,7 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "rg" {
   name     = "rg-postgres-demo"
-  location = "South India"
+  location = "Central US"
 }
 
 resource "azurerm_postgresql_flexible_server_database" "pg_database" {
