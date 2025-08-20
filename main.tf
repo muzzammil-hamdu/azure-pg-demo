@@ -9,7 +9,6 @@ terraform {
   backend "remote" {
     hostname     = "app.terraform.io"
     organization = "trm-mz"
-
     workspaces {
       name = "azure-pg-demo"
     }
@@ -18,22 +17,15 @@ terraform {
 
 provider "azurerm" {
   features {}
-
-  client_id       = var.client_id
-  client_secret   = var.client_secret
-  tenant_id       = var.tenant_id
-  subscription_id = var.subscription_id
 }
 
-# Resource Group
 resource "azurerm_resource_group" "rg" {
   name     = "rg-postgres-demo"
   location = "South India"
 }
 
-# PostgreSQL Flexible Server
 resource "azurerm_postgresql_flexible_server" "pg_server" {
-  name                   = "pg-server-mz-demo"   # <-- globally unique name
+  name                   = "pg-server-mz-demo"
   resource_group_name    = azurerm_resource_group.rg.name
   location               = azurerm_resource_group.rg.location
 
@@ -49,37 +41,17 @@ resource "azurerm_postgresql_flexible_server" "pg_server" {
 
   zone = "1"
 
+  delegated_subnet_id = null
+  private_dns_zone_id = null
+
   public_network_access_enabled = true
 }
 
-# PostgreSQL Database inside Flexible Server
-resource "azurerm_postgresql_flexible_server_database" "pg_database" {
+resource "azurerm_postgresql_flexible_database" "pg_database" {
   name      = "exampledb"
   server_id = azurerm_postgresql_flexible_server.pg_server.id
   collation = "en_US.utf8"
   charset   = "UTF8"
-}
-
-# Variables
-variable "client_id" {
-  description = "Azure client ID"
-  type        = string
-}
-
-variable "client_secret" {
-  description = "Azure client secret"
-  type        = string
-  sensitive   = true
-}
-
-variable "tenant_id" {
-  description = "Azure tenant ID"
-  type        = string
-}
-
-variable "subscription_id" {
-  description = "Azure subscription ID"
-  type        = string
 }
 
 variable "pg_password" {
@@ -88,8 +60,7 @@ variable "pg_password" {
   sensitive   = true
 }
 
-# Output
 output "postgres_connection_string" {
-  value     = "postgresql://citus:${var.pg_password}@${azurerm_postgresql_flexible_server.pg_server.fqdn}:5432/${azurerm_postgresql_flexible_server_database.pg_database.name}"
+  value     = "postgresql://citus:${var.pg_password}@${azurerm_postgresql_flexible_server.pg_server.fqdn}:5432/${azurerm_postgresql_flexible_database.pg_database.name}"
   sensitive = true
 }
