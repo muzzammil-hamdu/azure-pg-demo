@@ -25,7 +25,7 @@ resource "azurerm_resource_group" "rg" {
   location = "South India"
 }
 
-resource "azurerm_postgresql_flexible_server" "pg_server" {
+resource "azurerm_postgresql_flexible_server_database" "pg_database" {
   name                   = "pg-server-mz-demo123"
   resource_group_name    = azurerm_resource_group.rg.name
   location               = azurerm_resource_group.rg.location
