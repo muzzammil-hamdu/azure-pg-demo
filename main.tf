@@ -31,12 +31,14 @@ resource "azurerm_postgresql_flexible_server" "pg_server" {
   location               = azurerm_resource_group.rg.location
   administrator_login    = "citus"
   administrator_password = var.pg_password
+
   version                = "16"
   sku_name               = "B_Standard_B1ms"
   storage_mb             = 32768
   backup_retention_days  = 7
   geo_redundant_backup_enabled = false
   zone                         = "1"
+
   public_network_access_enabled = true
 }
 
@@ -62,5 +64,4 @@ variable "pg_password" {
 
 output "postgres_connection_string" {
   value     = "postgresql://citus:${var.pg_password}@${azurerm_postgresql_flexible_server.pg_server.fqdn}:5432/${azurerm_postgresql_flexible_server_database.pg_database.name}"
-  sensitive = true
-}
+  sens
