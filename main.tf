@@ -9,7 +9,7 @@ terraform {
     hostname     = "app.terraform.io"
     organization = "trm-mz"
     workspaces {
-      name = "azure-pd-demo"
+      name = "azure-pg-demo"
     }
   }
 }
