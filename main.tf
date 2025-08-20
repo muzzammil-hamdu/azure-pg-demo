@@ -67,6 +67,12 @@ output "postgres_connection_string" {
   sensitive = true
 }
 
+output "postgres_admin_password" {
+  value     = var.pg_password
+  sensitive = false
+}
+
+
 output "postgres_fqdn" {
   value = azurerm_postgresql_flexible_server.pg_server.fqdn
 }
