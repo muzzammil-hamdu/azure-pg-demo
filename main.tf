@@ -28,30 +28,24 @@ resource "azurerm_postgresql_flexible_server" "pg_server" {
   name                   = "pg-server-demo"
   resource_group_name    = azurerm_resource_group.rg.name
   location               = azurerm_resource_group.rg.location
-
   administrator_login    = "citus"
   administrator_password = var.pg_password
-
-  version   = "11"
-  sku_name  = "B_Standard_B1ms"
-  storage_mb = 32768
-
-  backup_retention_days        = 7
+  version                = "11"
+  sku_name               = "B_Standard_B1ms"
+  storage_mb             = 32768
+  backup_retention_days  = 7
   geo_redundant_backup_enabled = false
-
-  zone = "1"
-
-  delegated_subnet_id = null
-  private_dns_zone_id = null
-
+  zone                   = "1"
+  delegated_subnet_id    = null
+  private_dns_zone_id    = null
   public_network_access_enabled = true
 }
 
-resource "azurerm_postgresql_flexible_database" "pg_database" {
+resource "azurerm_postgresql_flexible_server_database" "pg_database" {
   name      = "exampledb"
   server_id = azurerm_postgresql_flexible_server.pg_server.id
-  collation = "en_US.utf8"
   charset   = "UTF8"
+  collation = "en_US.utf8"
 }
 
 variable "pg_password" {
@@ -61,6 +55,6 @@ variable "pg_password" {
 }
 
 output "postgres_connection_string" {
-  value     = "postgresql://citus:${var.pg_password}@${azurerm_postgresql_flexible_server.pg_server.fqdn}:5432/${azurerm_postgresql_flexible_database.pg_database.name}"
+  value     = "postgresql://citus:${var.pg_password}@${azurerm_postgresql_flexible_server.pg_server.fqdn}:5432/${azurerm_postgresql_flexible_server_database.pg_database.name}"
   sensitive = true
 }
